@@ -5,17 +5,11 @@
 GOOGLETEST ?= ../googletest/googletest
 CC = g++
 CFLAGS = -Wall -std=c++11
-TrieTest : Trie.o Node.o TrieTest.cpp
-	$(CC) -g $(CFLAGS) -o TrieTest Node.o Trie.o TrieTest.cpp
-#
-Trie.o :  Trie.cpp
-	$(CC) -g $(CFLAGS) -c Trie.cpp
-#
-Node.o :  Node.cpp
-	$(CC) -g $(CFLAGS) -c Node.cpp
-# add a make clean and make test option
+StudentsTests : StudentsTests.cpp
+  $(CC) $(CFLAGS) -o StudentsTests StudentsTests.cpp Students.o -I$(GOOGLETEST)/include  -L$(GOOGLETEST) -lgtest -lpthread
+
 clean:
-	rm TrieTest *.o
+	rm StudentsTests
 #
- test: TrieTest
-	./TrieTest "$(FILEONE)" "$(FILETWO)"
+test: StudentsTests
+	./StudentsTests
