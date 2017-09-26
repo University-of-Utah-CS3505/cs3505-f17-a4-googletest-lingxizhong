@@ -18,5 +18,5 @@ install:
     - cd -
 
 script:
-    make
+    make StudentsTests
     make test
