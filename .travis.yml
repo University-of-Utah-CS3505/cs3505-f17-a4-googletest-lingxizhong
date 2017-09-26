@@ -35,14 +35,4 @@ install:
     - cd -
 
 script:
-    - ls -al
-    - make Collatz.log
-    - make collatz-tests
-    - ls -al
-    - make html
-    - ls -al
-    - make test
-    - make clean
-    - make test CXX=clang++
-    - ls -al
-    - make check
+    make
