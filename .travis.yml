@@ -1,5 +1,5 @@
 language: cpp
-compiler: gcc
+compiler: g++
 sudo: false
 addons:
   apt:
@@ -18,5 +18,4 @@ install:
     - cd -
 
 script:
-    make StudentsTests
-    make test
+    make StudentsTests && make test
