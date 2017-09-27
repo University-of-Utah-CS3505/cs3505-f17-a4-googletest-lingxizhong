@@ -1,8 +1,15 @@
 //testoneceuponatime
 
 
+#include "Students.h"
+#include "gtest/gtest.h"
+int main(int argc, char **argv) {
+  printf("Running main() from gtest_main.cc\n");
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
 
-int main(int argc, char const *argv[]) {
-  /* code */
-  return 0;
+TEST(mehtod, name){
+
+  EXPECT_EQ();
 }
