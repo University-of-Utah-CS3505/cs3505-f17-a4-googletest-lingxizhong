@@ -1,5 +1,8 @@
-//testoneceuponatime
-
+/*
+Assignment 04 - Travis and Google TEST
+Lingxi Zhong and Osama Kergaye
+U0770136 | U(Osama put ur UID here)
+*/
 
 #include "Students.h"
 #include "gtest/gtest.h"
@@ -9,7 +12,7 @@ int main(int argc, char **argv) {
   return RUN_ALL_TESTS();
 }
 
-TEST(mehtod, name){
-
-  EXPECT_EQ();
+TEST(Constructor, Basic Constructor Testing){
+  Students* stu = new Students();
+  //EXPECT_EQ();
 }
