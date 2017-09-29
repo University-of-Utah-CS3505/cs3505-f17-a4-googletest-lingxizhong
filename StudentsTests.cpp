@@ -1,7 +1,8 @@
 /*
 Assignment 04 - Travis and Google TEST
 Lingxi Zhong and Osama Kergaye
-U0770136 | U(Osama put ur UID here)
+U0770136 | u0767339
+
 */
 
 #include "Students.h"
@@ -240,4 +241,172 @@ TEST(numberOfNames, numberOfNamesStressTest) {
     EXPECT_TRUE(stu.nameExists("user"+(to_string(j))));
   }
   EXPECT_EQ(100000, stu.numberOfNames());
+}
+
+// End of Lingxi tests, start of Osama Tests ------------
+
+
+//a bredth test of clearAll
+TEST(clearAll, bulkTestToEnsureClearGotAllData){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  stu.addUser("sambini", 001);
+  EXPECT_EQ(1, stu.numberOfNames());
+  stu.addGrade(001, 'A');
+  EXPECT_EQ('A', stu.gradeForName("sambini"));
+  stu.addPhoneNumbers(001, "801-801-1234");
+  EXPECT_EQ("801-801-1234", stu.phoneForName("sambini"));
+  stu.clearAll();
+  EXPECT_EQ(0, stu.numberOfNames());
+  EXPECT_FALSE(stu.nameExists("sambini"));
+  EXPECT_THROW(stu.removeStudent("sambini"), out_of_range);
+  //this error allready discoverd by Lingxi
+  //EXPECT_THROW(stu.phoneForName("sambini"), out_of_range);
+  EXPECT_THROW(stu.gradeForName("sambini"), out_of_range);
+  EXPECT_THROW(stu.removeStudent("sambini"), out_of_range);
+  vector<string> names;
+  names.push_back("sambini");
+  EXPECT_EQ(0, stu.removeList(names));
+}
+
+//small stress test for removeList via adding 100, then removeing 100
+TEST(removeList, 100PeopleRemoveTest){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  string user = "A";
+  vector<string> names;
+ for(int i = 0; i <100; i++){
+   stu.addUser(user, i);
+   names.push_back(user);
+   user.push_back(i);
+ }
+ EXPECT_EQ(100, stu.numberOfNames());
+ EXPECT_EQ(100, stu.removeList(names));
+ EXPECT_EQ(0, stu.removeList(names));
+ EXPECT_EQ(0, stu.numberOfNames());
+}
+
+//small stress test for removeList when it has nonsence in the vector
+TEST(removeList, 100PeopleRemoveTestWithNonsence){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  string user = "A";
+  vector<string> names;
+  names.push_back("");
+  names.push_back("34567890");
+ for(int i = 0; i <100; i++){
+   stu.addUser(user, i);
+   names.push_back(user);
+   user.push_back(i);
+ }
+ EXPECT_EQ(100, stu.numberOfNames());
+ //error found, if the vector has nonsence in it, it returns 0 instead
+ EXPECT_EQ(100, stu.removeList(names));
+ EXPECT_EQ(0, stu.removeList(names));
+ EXPECT_EQ(0, stu.numberOfNames());
+}
+
+//StressTest by adding then removeing each students
+TEST(removeStudent, 100studentRemoveTestWithoutNumberOrGradeAlternating){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  string user = "A";
+  vector<string> names;
+ for(int i = 0; i <100; i++){
+   stu.addUser(user, i);
+   stu.removeStudent(user);
+   EXPECT_EQ(0, stu.numberOfNames());
+   names.push_back(user);
+   user.push_back(i);
+ }
+ EXPECT_EQ(0, stu.removeList(names));
+ EXPECT_EQ(0, stu.numberOfNames());
+}
+
+
+//SressTest by adding then removeing each students and adding a grade
+TEST(removeStudent, 100studentRemoveTestWithoutNumberAlternating){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  string user = "A";
+ for(int i = 0; i <100; i++){
+   stu.addUser(user, i);
+   stu.addGrade(i, 'A');
+   EXPECT_EQ('A', stu.gradeForName(user));
+   stu.removeStudent(user);
+   EXPECT_EQ(0, stu.numberOfNames());
+   EXPECT_THROW(stu.gradeForName(user), out_of_range);
+   user.push_back(i);
+ }
+ EXPECT_EQ(0, stu.numberOfNames());
+}
+
+
+//SressTest by adding then removeing each students and adding a grade and number
+TEST(removeStudent, 100studentRemoveTestWithAllInfoAlternating){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  string user = "A";
+  string number = "0";
+ for(int i = 0; i <10; i++){
+   stu.addUser(user, i);
+   stu.addPhoneNumbers(i, number);
+   stu.addGrade(i, 'A');
+   stu.removeStudent(user);
+   EXPECT_EQ(0, stu.numberOfNames());
+   EXPECT_THROW(stu.gradeForName(user), out_of_range);
+   //stu.phoneForName(user);
+   //EXPECT_EQ(number, stu.phoneForName(user));
+   user.push_back(i);
+   number.push_back(i);
+ }
+ EXPECT_EQ(0, stu.numberOfNames());
+}
+
+//Tesing edge case for removing a non existant user
+TEST(removeStudent, removeNonUser){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  string user = "A";
+  string number = "0";
+  int i = 1;
+   stu.addUser(user, i);
+   stu.addPhoneNumbers(i, number);
+   stu.addGrade(i, 'A');
+  // EXPECT_EQ('A', stu.gradeForName(user));
+   EXPECT_THROW(stu.removeStudent("user"), out_of_range);
+
+   EXPECT_EQ(1, stu.numberOfNames());
+
+}
+
+//edge case testing for whitespace removal
+TEST(removeStudent, removeWhiteSpace){
+  Students stu;
+   EXPECT_THROW(stu.removeStudent(""), out_of_range);
+   EXPECT_EQ(0, stu.numberOfNames());
+}
+
+//removing valid whitespace
+TEST(removeStudent, removeWhiteSpaceAfterAddingWhiteSpace){
+  Students stu;
+  stu.addUser("", 0);
+  stu.removeStudent("");
+  EXPECT_EQ(0, stu.numberOfNames());
+}
+
+//Error found here phoneforname increments numberOfNames
+TEST(phoneForName, seemsToAddOneToNumberOfNames){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  stu.phoneForName("user");
+  EXPECT_EQ(0, stu.numberOfNames());
+}
+
+//Error found, phoneforname adds the user to the map instead of just returning the number, or throwing.
+TEST(phoneForName, doesPhoneForNameAddTheNameToTheSystem){
+  Students stu;
+  EXPECT_EQ(0, stu.numberOfNames());
+  stu.phoneForName("user");
+  EXPECT_FALSE(stu.nameExists("user"));
 }
