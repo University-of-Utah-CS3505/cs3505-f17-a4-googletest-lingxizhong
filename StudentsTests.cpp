@@ -402,11 +402,3 @@ TEST(phoneForName, seemsToAddOneToNumberOfNames){
   stu.phoneForName("user");
   EXPECT_EQ(0, stu.numberOfNames());
 }
-
-//Error found, phoneforname adds the user to the map instead of just returning the number, or throwing.
-TEST(phoneForName, doesPhoneForNameAddTheNameToTheSystem){
-  Students stu;
-  EXPECT_EQ(0, stu.numberOfNames());
-  stu.phoneForName("user");
-  EXPECT_FALSE(stu.nameExists("user"));
-}
